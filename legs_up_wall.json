@@ -1,0 +1,24 @@
+{
+  "name": "Legs Up the Wall",
+  "sanskrit_name": "Viparita Karani",
+  "overview_image": "/static/images/asanas/legs_up_wall.webp",
+  "difficulty": "beginner",
+  "benefits": "Calms nervous system, relieves tired legs, reduces anxiety and stress",
+  "steps": [
+    {
+      "instruction": "Lie on back near a wall, scoot hips close to wall",
+      "image": "/static/images/asanas/legs_up_wall.webp",
+      "duration": 30
+    },
+    {
+      "instruction": "Extend legs up the wall, arms relaxed at sides",
+      "image": "/static/images/asanas/legs_up_wall.webp",
+      "duration": 60
+    },
+    {
+      "instruction": "Close eyes, breathe deeply, let body completely relax",
+      "image": "/static/images/asanas/legs_up_wall.webp",
+      "duration": 180
+    }
+  ]
+}

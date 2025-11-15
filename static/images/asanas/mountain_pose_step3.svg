@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+        <defs>
+            <linearGradient id="bg1" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <rect width="200" height="300" fill="url(#bg1)"/>
+        <circle cx="100" cy="60" r="20" fill="#fff"/>
+        <rect x="85" y="85" width="30" height="80" rx="15" fill="#fff"/>
+        <rect x="70" y="100" width="15" height="60" rx="7" fill="#fff"/>
+        <rect x="115" y="100" width="15" height="60" rx="7" fill="#fff"/>
+        <rect x="85" y="165" width="12" height="70" rx="6" fill="#fff"/>
+        <rect x="103" y="165" width="12" height="70" rx="6" fill="#fff"/>
+        <text x="100" y="280" text-anchor="middle" fill="#fff" font-size="16" font-family="Arial">Mountain Pose - Step 3</text>
+    </svg>

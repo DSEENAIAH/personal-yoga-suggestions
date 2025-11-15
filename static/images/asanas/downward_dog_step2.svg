@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+        <defs>
+            <linearGradient id="bg4" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <rect width="200" height="300" fill="url(#bg4)"/>
+        <circle cx="100" cy="100" r="15" fill="#fff"/>
+        <path d="M 100 115 L 70 160 L 60 200" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <path d="M 100 115 L 130 160 L 140 200" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <path d="M 100 115 L 60 130 L 40 170" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <path d="M 100 115 L 140 130 L 160 170" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <text x="100" y="280" text-anchor="middle" fill="#fff" font-size="16" font-family="Arial">Downward Dog - Step 2</text>
+    </svg>

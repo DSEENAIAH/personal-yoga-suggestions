@@ -1,0 +1,24 @@
+{
+  "name": "Seated Meditation",
+  "sanskrit_name": "Sukhasana",
+  "overview_image": "/static/images/asanas/seated_meditation.webp",
+  "difficulty": "beginner",
+  "benefits": "Calms the mind, reduces stress and anxiety, improves focus and awareness",
+  "steps": [
+    {
+      "instruction": "Sit cross-legged with spine tall and straight",
+      "image": "/static/images/asanas/seated_meditation.webp",
+      "duration": 30
+    },
+    {
+      "instruction": "Rest hands on knees, close your eyes gently",
+      "image": "/static/images/asanas/seated_meditation.webp",
+      "duration": 30
+    },
+    {
+      "instruction": "Focus on your breath, let thoughts pass without judgment",
+      "image": "/static/images/asanas/seated_meditation.webp",
+      "duration": 120
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Warrior I",
+  "sanskrit_name": "Virabhadrasana I",
+  "overview_image": "/static/images/asanas/warrior_one.webp",
+  "difficulty": "intermediate",
+  "benefits": "Strengthens legs, opens hips and chest, improves focus and balance",
+  "steps": [
+    {
+      "instruction": "Step left foot back 3-4 feet, turn left foot out 45 degrees",
+      "image": "/static/images/asanas/warrior_one.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Bend right knee over ankle, square hips forward",
+      "image": "/static/images/asanas/warrior_one.webp",
+      "duration": 20
+    },
+    {
+      "instruction": "Raise arms overhead, hold and breathe deeply",
+      "image": "/static/images/asanas/warrior_one.webp",
+      "duration": 45
+    }
+  ]
+}

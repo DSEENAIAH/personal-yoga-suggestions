@@ -1,0 +1,24 @@
+{
+  "name": "Cobra Pose",
+  "sanskrit_name": "Bhujangasana",
+  "overview_image": "/static/images/asanas/cobra_pose.webp",
+  "difficulty": "intermediate",
+  "benefits": "Strengthens spine, opens chest and shoulders, energizes the body",
+  "steps": [
+    {
+      "instruction": "Lie face down, palms under shoulders",
+      "image": "/static/images/asanas/cobra_pose.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Press palms down, lift chest off the ground",
+      "image": "/static/images/asanas/cobra_pose.webp",
+      "duration": 30
+    },
+    {
+      "instruction": "Keep shoulders away from ears, breathe deeply",
+      "image": "/static/images/asanas/cobra_pose.webp",
+      "duration": 45
+    }
+  ]
+}

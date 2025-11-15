@@ -1,0 +1,24 @@
+{
+  "name": "Child's Pose",
+  "sanskrit_name": "Balasana",
+  "overview_image": "/static/images/asanas/childs_pose.webp",
+  "difficulty": "beginner",
+  "benefits": "Gently stretches hips, thighs, and ankles. Calms the brain and relieves stress",
+  "steps": [
+    {
+      "instruction": "Kneel on the floor, touch big toes together",
+      "image": "/static/images/asanas/childs_pose.webp",
+      "duration": 10
+    },
+    {
+      "instruction": "Sit back on heels, separate knees hip-width apart",
+      "image": "/static/images/asanas/childs_pose.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Fold forward, rest forehead on mat, arms extended or by sides",
+      "image": "/static/images/asanas/childs_pose.webp",
+      "duration": 90
+    }
+  ]
+}

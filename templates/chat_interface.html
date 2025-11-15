@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+
+{% block title %}Chat with Yoga Assistant - Mental Health Yoga{% endblock %}
+
+{% block content %}
+<div class="chat-interface">
+    <div class="chat-header">
+        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="22"/>
+            <line x1="8" y1="22" x2="16" y2="22"/>
+        </svg>
+        <h2>Yoga Assistant</h2>
+        <p class="subtitle">Tell me how you're feeling in any language - English, Telugu, Tamil, Hindi</p>
+    </div>
+    
+    <div class="safety-disclaimer">
+        <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <path d="M12 9v4"/>
+            <path d="m12 17 .01 0"/>
+        </svg>
+        <p><strong>Safety First:</strong> If you feel pain during any pose, stop immediately. This is a wellness tool, not medical advice.</p>
+    </div>
+    
+    <div class="chat-container" id="chat-container">
+        <div class="message bot-message">
+            <div class="message-content">
+                <p>Hello! I'm your yoga wellness assistant. I can understand English, Telugu (తెలుగు), Tamil (தமிழ்), and Hindi (हिंदी).</p>
+                <p>How are you feeling today? You can say things like:</p>
+                <ul>
+                    <li>"I'm feeling really stressed about work"</li>
+                    <li>"em chestunav, chala tension ga undi" (Telugu)</li>
+                    <li>"enga iruku, romba tired ah iruku" (Tamil)</li>
+                    <li>"bahut pareshan hun, kya karu" (Hindi)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chat-input-container">
+        <div class="input-wrapper">
+            <textarea 
+                id="user-input" 
+                placeholder="Type your message in any language..."
+                rows="2"
+            ></textarea>
+            <div class="button-group">
+                <button id="send-btn" disabled>
+                    <span>Send</span>
+                </button>
+                <button id="yoga-btn" class="yoga-suggest-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="22"/>
+                        <line x1="8" y1="22" x2="16" y2="22"/>
+                    </svg>
+                    <span>Suggest Yoga</span>
+                </button>
+            </div>
+        </div>
+        <div class="language-indicator">
+            <span>Detected Language: <strong id="detected-lang">English</strong></span>
+        </div>
+    </div>
+    
+
+    
+    <div class="alternative-option">
+        <p>Prefer quick selection? <a href="/" class="manual-link">Choose from emotion cards</a></p>
+    </div>
+</div>
+
+<script>
+let conversationHistory = [];
+let currentEmotion = null;
+let currentIntensity = 3;
+let detectedLanguage = 'english';
+let isWaitingForResponse = false;
+
+const chatContainer = document.getElementById('chat-container');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const yogaBtn = document.getElementById('yoga-btn');
+
+const detectedLangSpan = document.getElementById('detected-lang');
+
+// Enable send button when user types
+userInput.addEventListener('input', () => {
+    const hasText = userInput.value.trim().length > 0;
+    sendBtn.disabled = !hasText || isWaitingForResponse;
+});
+
+// Send message on Enter (Shift+Enter for new line)
+userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// Send button click
+sendBtn.addEventListener('click', sendMessage);
+
+// Yoga suggestion button click
+yogaBtn.addEventListener('click', suggestYoga);
+
+async function sendMessage() {
+    const message = userInput.value.trim();
+    if (!message || isWaitingForResponse) return;
+    
+    // Add user message to chat
+    addMessage(message, 'user');
+    userInput.value = '';
+    sendBtn.disabled = true;
+    isWaitingForResponse = true;
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    try {
+        const response = await fetch('/api/chat-analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: message,
+                conversation_history: conversationHistory
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            hideTypingIndicator();
+            handleBotResponse(data);
+        } else {
+            hideTypingIndicator();
+            addMessage('Sorry, I had trouble understanding. Could you try rephrasing?', 'bot');
+        }
+    } catch (error) {
+        hideTypingIndicator();
+        addMessage('Network error. Please check your connection and try again.', 'bot');
+    }
+    
+    isWaitingForResponse = false;
+}
+
+function addMessage(content, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    
+    if (typeof content === 'string') {
+        contentDiv.innerHTML = `<p>${content}</p>`;
+    } else {
+        contentDiv.appendChild(content);
+    }
+    
+    messageDiv.appendChild(contentDiv);
+    chatContainer.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    
+    // Add to conversation history
+    conversationHistory.push({
+        sender: sender,
+        content: typeof content === 'string' ? content : content.textContent,
+        timestamp: new Date().toISOString()
+    });
+}
+
+function handleBotResponse(data) {
+    // Update detected language
+    detectedLanguage = data.detected_language;
+    detectedLangSpan.textContent = capitalizeFirst(data.detected_language);
+    
+    // Add bot response
+    addMessage(data.response, 'bot');
+    
+    // Update emotion and intensity if detected
+    if (data.emotion) {
+        currentEmotion = data.emotion;
+        currentIntensity = data.intensity;
+        
+        // Show emotion summary
+        showEmotionSummary(data);
+    }
+    
+
+    
+    // Show yoga recommendation if ready
+    if (data.ready_for_yoga) {
+        showYogaRecommendation(data);
+    }
+}
+
+function showEmotionSummary(data) {
+    // Don't show emotion summary - keep it natural like human conversation
+    // Just store the emotion data for yoga recommendations
+}
+
+
+
+function showYogaRecommendation(data) {
+    const recommendationDiv = document.createElement('div');
+    recommendationDiv.className = 'yoga-recommendation';
+    recommendationDiv.innerHTML = `
+        <div class="recommendation-content">
+            <svg class="yoga-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="8" y1="22" x2="16" y2="22"/>
+            </svg>
+            <h4>Perfect! I have the ideal yoga flow for you</h4>
+            <p>${data.yoga_message}</p>
+            <button class="start-yoga-btn" onclick="startYogaFlow()">
+                Start My Personalized Yoga Flow
+            </button>
+        </div>
+    `;
+    
+    addMessage(recommendationDiv, 'bot');
+}
+
+async function processQuickResponse(response) {
+    // This would be processed similar to sendMessage but for quick responses
+    isWaitingForResponse = true;
+    showTypingIndicator();
+    
+    try {
+        const apiResponse = await fetch('/api/chat-analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: response,
+                conversation_history: conversationHistory,
+                is_quick_response: true
+            })
+        });
+        
+        const data = await apiResponse.json();
+        
+        if (apiResponse.ok) {
+            hideTypingIndicator();
+            handleBotResponse(data);
+        }
+    } catch (error) {
+        hideTypingIndicator();
+        addMessage('Let me try to understand better. Could you tell me more?', 'bot');
+    }
+    
+    isWaitingForResponse = false;
+}
+
+async function startYogaFlow() {
+    if (!currentEmotion) return;
+    
+    try {
+        const response = await fetch('/api/session/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                emotion: currentEmotion,
+                intensity: currentIntensity
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            sessionStorage.setItem('yogaSession', JSON.stringify(data));
+            sessionStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+            window.location.href = '/guided-flow';
+        } else {
+            addMessage('Sorry, there was an issue starting your yoga session. Please try again.', 'bot');
+        }
+    } catch (error) {
+        addMessage('Network error. Please try again.', 'bot');
+    }
+}
+
+function showTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message bot-message typing-indicator';
+    typingDiv.id = 'typing-indicator';
+    typingDiv.innerHTML = `
+        <div class="message-content">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    `;
+    chatContainer.appendChild(typingDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+
+async function suggestYoga() {
+    if (conversationHistory.length === 0) {
+        addMessage('Please chat with me first so I can understand how you\'re feeling!', 'bot');
+        return;
+    }
+    
+    // Analyze entire conversation to determine emotion
+    const allUserMessages = conversationHistory
+        .filter(msg => msg.sender === 'user')
+        .map(msg => msg.content)
+        .join(' ');
+    
+    try {
+        const response = await fetch('/api/analyze-conversation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                conversation_history: conversationHistory
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            currentEmotion = data.emotion;
+            currentIntensity = data.intensity;
+            
+            // Show yoga recommendation
+            const recommendationDiv = document.createElement('div');
+            recommendationDiv.className = 'yoga-recommendation';
+            recommendationDiv.innerHTML = `
+                <div class="recommendation-content">
+                    <svg class="yoga-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="22"/>
+                        <line x1="8" y1="22" x2="16" y2="22"/>
+                    </svg>
+                    <h4>Based on our conversation, here's your personalized yoga flow</h4>
+                    <p>Detected emotion: <strong>${data.emotion}</strong></p>
+                    <p>${data.yoga_message}</p>
+                    <button class="start-yoga-btn" onclick="startYogaFlow()">
+                        Start ${data.emotion.charAt(0).toUpperCase() + data.emotion.slice(1)} Relief Yoga
+                    </button>
+                </div>
+            `;
+            
+            addMessage(recommendationDiv, 'bot');
+        } else {
+            addMessage('Let me understand you better through our conversation first!', 'bot');
+        }
+    } catch (error) {
+        addMessage('Unable to analyze conversation right now. Please try again.', 'bot');
+    }
+}
+
+function capitalizeFirst(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+</script>
+{% endblock %}

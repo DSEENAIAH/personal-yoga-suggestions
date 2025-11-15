@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+        <defs>
+            <linearGradient id="bg0" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <rect width="200" height="300" fill="url(#bg0)"/>
+        <circle cx="100" cy="100" r="25" fill="#fff"/>
+        <rect x="80" y="130" width="40" height="80" rx="20" fill="#fff"/>
+        <rect x="60" y="145" width="20" height="60" rx="10" fill="#fff"/>
+        <rect x="120" y="145" width="20" height="60" rx="10" fill="#fff"/>
+        <rect x="85" y="210" width="15" height="70" rx="7" fill="#fff"/>
+        <rect x="100" y="210" width="15" height="70" rx="7" fill="#fff"/>
+        <text x="100" y="280" text-anchor="middle" fill="#fff" font-size="16" font-family="Arial">Step 2</text>
+    </svg>

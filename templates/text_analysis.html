@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Tell Us How You Feel - Mental Health Yoga{% endblock %}
+
+{% block content %}
+<div class="text-analysis">
+    <h2>How are you feeling today?</h2>
+    <p class="subtitle">Describe your current state in your own words</p>
+    
+    <div class="safety-disclaimer">
+        <p><strong>⚠️ Safety First:</strong> If you feel pain or discomfort during any pose, stop immediately. Listen to your body and modify poses as needed.</p>
+    </div>
+    
+    <div class="input-section">
+        <label for="feeling-text">Tell me about your day or how you're feeling:</label>
+        <textarea 
+            id="feeling-text" 
+            placeholder="e.g., 'I'm feeling really stressed about work deadlines and can't seem to relax...' or 'Had a tough day, feeling overwhelmed and anxious about everything...'"
+            aria-describedby="text-help"
+        ></textarea>
+        <p id="text-help" class="help-text">Be as descriptive as you like - I'll analyze your words to suggest the perfect yoga flow</p>
+    </div>
+    
+    <div class="analysis-result" id="analysis-result" style="display: none;">
+        <div class="detected-emotion">
+            <h3>I sense you're feeling: <span id="detected-emotion"></span></h3>
+            <p id="emotion-message"></p>
+            <div class="intensity-display">
+                <span>Intensity Level: </span>
+                <div class="intensity-dots">
+                    <span class="dot" data-level="1"></span>
+                    <span class="dot" data-level="2"></span>
+                    <span class="dot" data-level="3"></span>
+                    <span class="dot" data-level="4"></span>
+                    <span class="dot" data-level="5"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="suggestion-preview">
+            <h4>Recommended Focus:</h4>
+            <p id="focus-area"></p>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <button class="analyze-btn" id="analyze-btn" disabled>
+            Analyze My Feelings
+        </button>
+        <button class="continue-btn" id="continue-btn" style="display: none;">
+            Start My Personalized Flow
+        </button>
+    </div>
+    
+    <div class="alternative-option">
+        <p>Prefer to choose manually? <a href="/" class="manual-link">Select from emotion cards</a></p>
+    </div>
+    
+    <div class="loading" id="loading" style="display: none;" role="status" aria-live="polite">
+        Analyzing your feelings...
+    </div>
+</div>
+
+<script>
+let detectedEmotion = null;
+let detectedIntensity = 3;
+
+const feelingText = document.getElementById('feeling-text');
+const analyzeBtn = document.getElementById('analyze-btn');
+const continueBtn = document.getElementById('continue-btn');
+const analysisResult = document.getElementById('analysis-result');
+const loading = document.getElementById('loading');
+
+// Enable analyze button when text is entered
+feelingText.addEventListener('input', () => {
+    const hasText = feelingText.value.trim().length > 10;
+    analyzeBtn.disabled = !hasText;
+    
+    if (!hasText) {
+        analysisResult.style.display = 'none';
+        continueBtn.style.display = 'none';
+    }
+});
+
+// Analyze button click
+analyzeBtn.addEventListener('click', async () => {
+    const text = feelingText.value.trim();
+    if (text.length < 10) return;
+    
+    analyzeBtn.disabled = true;
+    loading.style.display = 'block';
+    analysisResult.style.display = 'none';
+    
+    try {
+        const response = await fetch('/api/analyze-emotion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: text })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            detectedEmotion = data.emotion;
+            detectedIntensity = data.intensity;
+            
+            displayAnalysisResult(data);
+            analyzeBtn.disabled = false;
+            loading.style.display = 'none';
+        } else {
+            alert('Error analyzing text: ' + data.error);
+            analyzeBtn.disabled = false;
+            loading.style.display = 'none';
+        }
+    } catch (error) {
+        alert('Network error. Please try again.');
+        analyzeBtn.disabled = false;
+        loading.style.display = 'none';
+    }
+});
+
+function displayAnalysisResult(data) {
+    document.getElementById('detected-emotion').textContent = 
+        data.emotion.charAt(0).toUpperCase() + data.emotion.slice(1);
+    document.getElementById('emotion-message').textContent = data.suggestion.message;
+    document.getElementById('focus-area').textContent = data.suggestion.focus;
+    
+    // Update intensity dots
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index < data.intensity);
+    });
+    
+    analysisResult.style.display = 'block';
+    continueBtn.style.display = 'block';
+}
+
+// Continue to yoga flow
+continueBtn.addEventListener('click', async () => {
+    if (!detectedEmotion) return;
+    
+    continueBtn.disabled = true;
+    loading.style.display = 'block';
+    
+    try {
+        const response = await fetch('/api/session/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                emotion: detectedEmotion,
+                intensity: detectedIntensity
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            sessionStorage.setItem('yogaSession', JSON.stringify(data));
+            sessionStorage.setItem('originalText', feelingText.value);
+            window.location.href = '/guided-flow';
+        } else {
+            alert('Error: ' + data.error);
+            continueBtn.disabled = false;
+            loading.style.display = 'none';
+        }
+    } catch (error) {
+        alert('Network error. Please try again.');
+        continueBtn.disabled = false;
+        loading.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{
+  "name": "Bridge Pose",
+  "sanskrit_name": "Setu Bandhasana",
+  "overview_image": "/static/images/asanas/bridge_pose.webp",
+  "difficulty": "intermediate",
+  "benefits": "Strengthens back and glutes, opens chest and hip flexors, energizes the body",
+  "steps": [
+    {
+      "instruction": "Lie on back, knees bent, feet hip-width apart",
+      "image": "/static/images/asanas/bridge_pose.webp",
+      "duration": 20
+    },
+    {
+      "instruction": "Press feet down, lift hips toward ceiling",
+      "image": "/static/images/asanas/bridge_pose.webp",
+      "duration": 30
+    },
+    {
+      "instruction": "Interlace fingers under back, breathe deeply",
+      "image": "/static/images/asanas/bridge_pose.webp",
+      "duration": 60
+    }
+  ]
+}

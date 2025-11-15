@@ -1,0 +1,24 @@
+{
+  "name": "Downward Facing Dog",
+  "sanskrit_name": "Adho Mukha Svanasana",
+  "overview_image": "/static/images/asanas/downward_dog.webp",
+  "difficulty": "beginner",
+  "benefits": "Stretches shoulders, hamstrings, calves, arches, and hands. Strengthens arms and legs",
+  "steps": [
+    {
+      "instruction": "Start on hands and knees, tuck toes under",
+      "image": "/static/images/asanas/downward_dog.webp",
+      "duration": 10
+    },
+    {
+      "instruction": "Lift hips up and back, straightening legs",
+      "image": "/static/images/asanas/downward_dog.webp",
+      "duration": 20
+    },
+    {
+      "instruction": "Press hands down, lengthen spine, breathe deeply",
+      "image": "/static/images/asanas/downward_dog.webp",
+      "duration": 60
+    }
+  ]
+}

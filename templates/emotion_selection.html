@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Select Your Emotion - Mental Health Yoga{% endblock %}
+
+{% block content %}
+<div class="emotion-selection">
+    <h2>How are you feeling today?</h2>
+    <p class="subtitle">Choose how you'd like to express your current state</p>
+    
+    <div class="input-method-selector">
+        <div class="method-card active" data-method="cards">
+            <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <h3>Choose from Cards</h3>
+            <p>Quick selection from common emotions</p>
+        </div>
+        <div class="method-card" data-method="chat">
+            <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/>
+            </svg>
+            <h3>Chat with Assistant</h3>
+            <p>Conversational analysis in any language</p>
+        </div>
+        <div class="method-card" data-method="voice">
+            <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <path d="M12 19v4"/>
+                <path d="M8 23h8"/>
+            </svg>
+            <h3>Voice Conversation</h3>
+            <p>Natural voice-to-voice chat with AI</p>
+        </div>
+    </div>
+    
+    <div class="safety-disclaimer">
+        <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <path d="M12 9v4"/>
+            <path d="m12 17 .01 0"/>
+        </svg>
+        <p><strong>Safety First:</strong> If you feel pain or discomfort during any pose, stop immediately. Listen to your body and modify poses as needed.</p>
+    </div>
+    
+    <div id="card-method" class="input-method">
+        <div class="emotion-grid">
+            <button class="emotion-card" data-emotion="anxious" aria-label="Select anxious emotion">
+                <svg class="emotion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                    <line x1="15" y1="9" x2="15.01" y2="9"/>
+                </svg>
+                <span class="emotion-label">Anxious</span>
+            </button>
+            <button class="emotion-card" data-emotion="stressed" aria-label="Select stressed emotion">
+                <svg class="emotion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M8 12h8"/>
+                    <path d="M8 8h8"/>
+                    <path d="M8 16h8"/>
+                </svg>
+                <span class="emotion-label">Stressed</span>
+            </button>
+            <button class="emotion-card" data-emotion="sad" aria-label="Select sad emotion">
+                <svg class="emotion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                    <line x1="15" y1="9" x2="15.01" y2="9"/>
+                </svg>
+                <span class="emotion-label">Sad</span>
+            </button>
+            <button class="emotion-card" data-emotion="angry" aria-label="Select angry emotion">
+                <svg class="emotion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+                    <path d="M7.5 8 10 10"/>
+                    <path d="m14 10 2.5-2"/>
+                    <path d="M9 10h0.01"/>
+                    <path d="M15 10h0.01"/>
+                </svg>
+                <span class="emotion-label">Angry</span>
+            </button>
+            <button class="emotion-card" data-emotion="overwhelmed" aria-label="Select overwhelmed emotion">
+                <svg class="emotion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <path d="M12 17h.01"/>
+                </svg>
+                <span class="emotion-label">Overwhelmed</span>
+            </button>
+            <button class="emotion-card" data-emotion="tired" aria-label="Select tired emotion">
+                <svg class="emotion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M8 15h8"/>
+                    <path d="M8.5 9 10 10.5"/>
+                    <path d="M15.5 9 14 10.5"/>
+                </svg>
+                <span class="emotion-label">Tired</span>
+            </button>
+        </div>
+        
+
+        
+        <button class="continue-btn" id="continue-btn" disabled aria-describedby="selection-help">
+            Continue to Yoga Flow
+        </button>
+        <p id="selection-help" class="help-text">Please select an emotion above to continue</p>
+    </div>
+    
+    <div class="loading" id="loading" style="display: none;" role="status" aria-live="polite">
+        Starting your personalized session...
+    </div>
+</div>
+
+<script>
+let selectedEmotion = null;
+let currentMethod = 'cards';
+
+// Method selector
+document.querySelectorAll('.method-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const method = card.dataset.method;
+        
+        if (method === 'chat') {
+            window.location.href = '/chat';
+        } else if (method === 'voice') {
+            window.location.href = '/voice-chat';
+        } else {
+            // Already on cards method
+            document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+        }
+    });
+});
+
+// Emotion card selection
+document.querySelectorAll('.emotion-card').forEach(card => {
+    card.addEventListener('click', () => {
+        document.querySelectorAll('.emotion-card').forEach(c => {
+            c.classList.remove('selected');
+            c.setAttribute('aria-pressed', 'false');
+        });
+        card.classList.add('selected');
+        card.setAttribute('aria-pressed', 'true');
+        selectedEmotion = card.dataset.emotion;
+        document.getElementById('continue-btn').disabled = false;
+        document.getElementById('selection-help').textContent = `${selectedEmotion.charAt(0).toUpperCase() + selectedEmotion.slice(1)} selected. Ready to continue.`;
+    });
+});
+
+
+
+document.getElementById('continue-btn').addEventListener('click', async () => {
+    if (!selectedEmotion) return;
+    
+    const continueBtn = document.getElementById('continue-btn');
+    const loading = document.getElementById('loading');
+    
+    continueBtn.disabled = true;
+    loading.style.display = 'block';
+    
+    try {
+        const response = await fetch('/api/session/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                emotion: selectedEmotion,
+                intensity: 3
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            sessionStorage.setItem('yogaSession', JSON.stringify(data));
+            window.location.href = '/guided-flow';
+        } else {
+            alert('Error: ' + data.error);
+            continueBtn.disabled = false;
+            loading.style.display = 'none';
+        }
+    } catch (error) {
+        alert('Network error. Please check your connection and try again.');
+        continueBtn.disabled = false;
+        loading.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

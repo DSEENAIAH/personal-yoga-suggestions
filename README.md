@@ -38,10 +38,15 @@ mental_health_yoga_app/
 ### Prerequisites
 
 - Python 3.7+
- # Personal Yoga Suggestions (Mental Health Yoga App)
+ # Personal Yoga Suggestions
 
-A compact Flask web application that suggests short yoga sequences based on user emotion and intensity. It includes a guided session UI, local asana data (JSON), and automation for one-click setup on Windows.
+A small Flask app that recommends short yoga sequences based on the user's emotional state and intensity. Intended for personal or educational use.
 
+How to use
+ - Windows (one-click): run `run_app.bat` from the project root. It creates a `.venv`, installs dependencies, seeds the database if missing, and starts the dev server.
+ - Manual (cross-platform): create and activate a virtualenv, run `pip install -r requirements.txt`, then `python seed_data.py` (once) and `python app.py` to start the server.
+
+Open http://127.0.0.1:5000 in your browser.
 ---
 
 ## Quick overview

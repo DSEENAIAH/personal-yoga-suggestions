@@ -1,0 +1,24 @@
+{
+  "name": "Standing Forward Fold",
+  "sanskrit_name": "Uttanasana",
+  "overview_image": "/static/images/asanas/forward_fold.webp",
+  "difficulty": "beginner",
+  "benefits": "Stretches hamstrings and calves, calms the mind, relieves stress",
+  "steps": [
+    {
+      "instruction": "Stand in Mountain Pose, hands on hips",
+      "image": "/static/images/asanas/forward_fold.webp",
+      "duration": 10
+    },
+    {
+      "instruction": "Exhale and hinge forward from hips, keeping knees soft",
+      "image": "/static/images/asanas/forward_fold.webp",
+      "duration": 20
+    },
+    {
+      "instruction": "Let arms hang or hold opposite elbows, breathe deeply",
+      "image": "/static/images/asanas/forward_fold.webp",
+      "duration": 30
+    }
+  ]
+}

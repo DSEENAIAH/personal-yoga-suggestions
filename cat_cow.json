@@ -1,0 +1,29 @@
+{
+  "name": "Cat-Cow Pose",
+  "sanskrit_name": "Marjaryasana-Bitilasana",
+  "overview_image": "/static/images/asanas/cat_cow.webp",
+  "difficulty": "beginner",
+  "benefits": "Improves spinal flexibility, relieves back tension, warms up the spine",
+  "steps": [
+    {
+      "instruction": "Start on hands and knees in tabletop position",
+      "image": "/static/images/asanas/cat_cow.webp",
+      "duration": 10
+    },
+    {
+      "instruction": "Cow: Arch back, lift chest and tailbone, look up",
+      "image": "/static/images/asanas/cat_cow.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Cat: Round spine, tuck chin to chest, draw belly in",
+      "image": "/static/images/asanas/cat_cow.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Continue flowing between cat and cow with breath",
+      "image": "/static/images/asanas/cat_cow.webp",
+      "duration": 60
+    }
+  ]
+}

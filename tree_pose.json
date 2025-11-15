@@ -1,0 +1,24 @@
+{
+  "name": "Tree Pose",
+  "sanskrit_name": "Vrikshasana",
+  "overview_image": "/static/images/asanas/tree_pose.webp",
+  "difficulty": "intermediate",
+  "benefits": "Improves balance, strengthens legs and core, calms the mind",
+  "steps": [
+    {
+      "instruction": "Stand in Mountain Pose, shift weight to left foot",
+      "image": "/static/images/asanas/tree_pose.webp",
+      "duration": 10
+    },
+    {
+      "instruction": "Place right foot on inner left thigh or calf (not knee)",
+      "image": "/static/images/asanas/tree_pose.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Bring palms together at heart center, find your balance",
+      "image": "/static/images/asanas/tree_pose.webp",
+      "duration": 60
+    }
+  ]
+}

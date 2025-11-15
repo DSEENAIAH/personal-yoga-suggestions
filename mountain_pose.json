@@ -1,0 +1,24 @@
+{
+  "name": "Mountain Pose",
+  "sanskrit_name": "Tadasana",
+  "overview_image": "/static/images/asanas/mountain_pose.webp",
+  "difficulty": "beginner",
+  "benefits": "Improves posture, strengthens thighs, knees, and ankles, firms abdomen and buttocks",
+  "steps": [
+    {
+      "instruction": "Stand with your feet hip-width apart, arms at your sides",
+      "image": "/static/images/asanas/mountain_pose.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Ground through your feet and lengthen through the crown of your head",
+      "image": "/static/images/asanas/mountain_pose.webp",
+      "duration": 15
+    },
+    {
+      "instruction": "Take deep breaths and center yourself in this moment",
+      "image": "/static/images/asanas/mountain_pose.webp",
+      "duration": 30
+    }
+  ]
+}

@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block title %}Guided Yoga Flow - Mental Health Yoga{% endblock %}
+
+{% block content %}
+<div class="guided-flow">
+    <div class="flow-header">
+        <h2 id="sequence-name">Your Personalized Yoga Flow</h2>
+        <p id="sequence-description" class="sequence-help">Loading your customized practice...</p>
+
+    </div>
+    
+    <div class="safety-reminder">
+        <p><strong>Remember:</strong> Move at your own pace. If you feel pain, stop immediately. Breathe deeply throughout your practice.</p>
+    </div>
+    
+    <div class="flow-container">
+        <div class="asana-overview">
+            <div class="asana-image">
+                <img src="" alt="" id="pose-image" style="display: none;">
+                <div class="pose-placeholder" id="pose-placeholder">
+                    <svg class="pose-icon" viewBox="0 0 64 64" fill="currentColor">
+                        <!-- Yoga person icon -->
+                        <circle cx="32" cy="12" r="6"/>
+                        <path d="M32 20c-3 0-5 2-5 5v8h10v-8c0-3-2-5-5-5z"/>
+                        <path d="M20 38l7-5v-8h10v8l7 5v15h-4v-12l-6-4-6 4v12h-4v-15z"/>
+                        <circle cx="20" cy="48" r="3"/>
+                        <circle cx="44" cy="48" r="3"/>
+                    </svg>
+                    <span id="placeholder-text">Loading...</span>
+                </div>
+            </div>
+            <h3 id="pose-name">Loading...</h3>
+            <button class="video-ref-btn" id="video-ref-btn">
+                <svg class="video-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="23 7 16 12 23 17 23 7"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+                <span>See Video Reference</span>
+            </button>
+        </div>
+        
+        <div class="step-content">
+            <div class="step-header">
+                <span class="step-counter">Step <span id="current-step">1</span> of <span id="total-steps">1</span></span>
+                <div class="step-timer">
+                    <div class="timer-circle" role="timer" aria-live="polite">
+                        <span id="timer-display" aria-label="Time remaining">0:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-instructions">
+                <p id="step-text">Loading your personalized yoga flow...</p>
+            </div>
+        </div>
+        
+        <div class="progress-section">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress" id="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text"><span id="progress-percent">0</span>% Complete</span>
+        </div>
+        
+        <div class="flow-controls">
+            <button class="control-btn" id="prev-btn" disabled aria-label="Go to previous step">
+                <span>← Previous</span>
+            </button>
+            <button class="control-btn primary" id="pause-btn" aria-label="Pause or resume timer">
+                <span id="pause-text">⏸ Pause</span>
+            </button>
+            <button class="control-btn" id="next-btn" aria-label="Go to next step">
+                <span>Next →</span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="flow-footer">
+        <a href="/" class="back-btn" aria-label="Return to emotion selection">← Back to Emotion Selection</a>
+        <button class="end-session-btn" id="end-session" aria-label="End current session">End Session</button>
+    </div>
+</div>
+
+<!-- Simple Coming Soon Alert -->
+<div class="alert-overlay" id="coming-soon-alert" style="display: none;">
+    <div class="simple-alert">
+        <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4"/>
+            <path d="M12 8h.01"/>
+        </svg>
+        <h3>Coming Soon</h3>
+        <p>Video references will be available in the next update</p>
+        <button class="alert-btn" id="close-alert">OK</button>
+    </div>
+</div>
+
+<!-- Session Complete Popup -->
+<div class="alert-overlay" id="session-complete" style="display: none;">
+    <div class="completion-alert">
+        <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22,4 12,14.01 9,11.01"/>
+        </svg>
+        <h3>Great Work!</h3>
+        <p id="completion-message">You've completed your yoga session. Hope you feel energized and refreshed!</p>
+        <button class="completion-btn" id="finish-btn">Continue</button>
+    </div>
+</div>
+
+<script>
+let sessionData = null;
+let currentAsanaIndex = 0;
+let currentStepIndex = 0;
+let isPaused = false;
+let timer = null;
+let timeRemaining = 0;
+let totalElapsed = 0;
+let selectedRating = 0;
+
+const sequenceDescriptions = {
+    'anxious': 'Gentle poses to calm your nervous system and reduce anxiety',
+    'stressed': 'Flowing movements to release tension and restore balance',
+    'sad': 'Uplifting poses to boost mood and energy levels',
+    'angry': 'Grounding poses to channel energy and find inner peace',
+    'overwhelmed': 'Restorative poses to create space and mental clarity',
+    'tired': 'Energizing poses to revitalize your body and mind'
+};
+
+// Local images from static/images/asanas folder
+const localImages = {
+    'Mountain Pose': '/static/images/asanas/mountain_pose.webp',
+    'Standing Forward Fold': '/static/images/asanas/forward_fold.webp',
+    'Downward Facing Dog': '/static/images/asanas/downward_dog.webp',
+    "Child's Pose": '/static/images/asanas/childs_pose.webp',
+    'Warrior I': '/static/images/asanas/warrior_one.webp',
+    'Tree Pose': '/static/images/asanas/tree_pose.webp',
+    'Cat-Cow Pose': '/static/images/asanas/cat_cow.webp',
+    'Cobra Pose': '/static/images/asanas/cobra_pose.webp',
+    'Seated Meditation': '/static/images/asanas/seated_meditation.webp',
+    'Bridge Pose': '/static/images/asanas/bridge_pose.webp',
+    'Legs Up the Wall': '/static/images/asanas/legs_up_wall.webp'
+};
+
+function getLocalImage(asanaName) {
+    const keys = Object.keys(localImages);
+    const found = keys.find(k => k.toLowerCase() === asanaName.toLowerCase());
+    return found ? localImages[found] : null;
+}
+
+function init() {
+    const storedSession = sessionStorage.getItem('yogaSession');
+    if (!storedSession) {
+        window.location.href = '/';
+        return;
+    }
+    
+    sessionData = JSON.parse(storedSession);
+    
+    document.getElementById('sequence-name').textContent = sessionData.sequence.name;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const emotion = urlParams.get('emotion') || sessionData.sequence.asanas[0]?.emotion || 'calm';
+    const intensity = urlParams.get('intensity') || '3';
+    
+
+    
+    const description = sequenceDescriptions[emotion] || 'Personalized poses for your current state';
+    document.getElementById('sequence-description').textContent = description;
+    
+    updateDisplay();
+    startTimer();
+}
+
+function updateDisplay() {
+    if (!sessionData || !sessionData.sequence.asanas.length) return;
+    
+    const currentAsana = sessionData.sequence.asanas[currentAsanaIndex];
+    const currentStep = currentAsana.steps[currentStepIndex];
+    
+    document.getElementById('pose-name').textContent = `${currentAsana.name} (${currentAsana.sanskrit_name})`;
+    
+    const poseImage = document.getElementById('pose-image');
+    const placeholder = document.getElementById('pose-placeholder');
+    
+
+    
+    // Use local images first, then fallback to database URLs
+    let imgUrl = getLocalImage(currentAsana.name);
+    
+    // If no local image found, use database image
+    if (!imgUrl) {
+        imgUrl = (currentAsana.overview_image && currentAsana.overview_image.trim() !== '')
+            ? currentAsana.overview_image
+            : (currentStep.image || '');
+    }
+
+
+    // Try to load the image with graceful fallback
+    if (imgUrl && imgUrl !== '') {
+
+        poseImage.src = imgUrl;
+        poseImage.alt = `${currentAsana.name} - Step ${currentStepIndex + 1}: ${currentStep.instruction}`;
+        
+        // Show placeholder while loading
+        poseImage.style.display = 'none';
+        placeholder.style.display = 'flex';
+        document.getElementById('placeholder-text').textContent = 'Loading image...';
+        
+        // Handle image loading errors
+        poseImage.onerror = () => {
+            poseImage.style.display = 'none';
+            placeholder.style.display = 'flex';
+            document.getElementById('placeholder-text').textContent = currentAsana.name;
+        };
+        
+        // Handle successful image loading
+        poseImage.onload = () => {
+            poseImage.style.display = 'block';
+            placeholder.style.display = 'none';
+        };
+    } else {
+        // No valid image URL provided, show placeholder
+        poseImage.style.display = 'none';
+        placeholder.style.display = 'flex';
+        document.getElementById('placeholder-text').textContent = currentAsana.name;
+    }
+    
+    const totalSteps = sessionData.sequence.asanas.reduce((sum, asana) => sum + asana.steps.length, 0);
+    const currentStepNumber = sessionData.sequence.asanas.slice(0, currentAsanaIndex)
+        .reduce((sum, asana) => sum + asana.steps.length, 0) + currentStepIndex + 1;
+    
+    document.getElementById('current-step').textContent = currentStepNumber;
+    document.getElementById('total-steps').textContent = totalSteps;
+    document.getElementById('step-text').textContent = currentStep.instruction;
+    
+    const progress = (currentStepNumber / totalSteps) * 100;
+    const progressFill = document.getElementById('progress-fill');
+    const progressBar = progressFill.parentElement;
+    
+    progressFill.style.width = progress + '%';
+    progressBar.setAttribute('aria-valuenow', Math.round(progress));
+    document.getElementById('progress-percent').textContent = Math.round(progress);
+    
+    document.getElementById('prev-btn').disabled = currentAsanaIndex === 0 && currentStepIndex === 0;
+    
+    const isLastAsana = currentAsanaIndex === sessionData.sequence.asanas.length - 1;
+    const isLastStep = currentStepIndex === currentAsana.steps.length - 1;
+    document.getElementById('next-btn').disabled = isLastAsana && isLastStep;
+    
+    timeRemaining = currentStep.duration;
+    updateTimerDisplay();
+}
+
+function startTimer() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+        if (!isPaused && timeRemaining > 0) {
+            timeRemaining--;
+            totalElapsed++;
+            updateTimerDisplay();
+            
+            if (timeRemaining === 0) {
+                nextStep();
+            }
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    document.getElementById('timer-display').textContent = display;
+    document.getElementById('timer-display').setAttribute('aria-label', `${minutes} minutes ${seconds} seconds remaining`);
+}
+
+function togglePause() {
+    isPaused = !isPaused;
+    const pauseBtn = document.getElementById('pause-btn');
+    const pauseText = document.getElementById('pause-text');
+    
+    if (isPaused) {
+        pauseText.textContent = '▶ Resume';
+        pauseBtn.classList.add('paused');
+        pauseBtn.setAttribute('aria-label', 'Resume timer');
+    } else {
+        pauseText.textContent = '⏸ Pause';
+        pauseBtn.classList.remove('paused');
+        pauseBtn.setAttribute('aria-label', 'Pause timer');
+    }
+}
+
+function nextStep() {
+    const currentAsana = sessionData.sequence.asanas[currentAsanaIndex];
+    
+    if (currentStepIndex < currentAsana.steps.length - 1) {
+        currentStepIndex++;
+    } else if (currentAsanaIndex < sessionData.sequence.asanas.length - 1) {
+        currentAsanaIndex++;
+        currentStepIndex = 0;
+    } else {
+        completeSession();
+        return;
+    }
+    
+    updateDisplay();
+}
+
+function prevStep() {
+    if (currentStepIndex > 0) {
+        currentStepIndex--;
+    } else if (currentAsanaIndex > 0) {
+        currentAsanaIndex--;
+        currentStepIndex = sessionData.sequence.asanas[currentAsanaIndex].steps.length - 1;
+    }
+    
+    updateDisplay();
+}
+
+function completeSession() {
+    clearInterval(timer);
+    finishSession();
+}
+
+async function finishSession() {
+    showCompletionMessage();
+}
+
+function showCompletionMessage() {
+    const emotion = sessionData.sequence.asanas[0]?.emotion || 'calm';
+    const messages = {
+        'anxious': 'You\'ve completed your calming session. Hope you feel more peaceful and centered!',
+        'stressed': 'Great job on your stress-relief session. Hope you feel more relaxed and balanced!',
+        'sad': 'You\'ve finished your uplifting session. Hope you feel brighter and more positive!',
+        'angry': 'Well done on your grounding session. Hope you feel more calm and at peace!',
+        'overwhelmed': 'You\'ve completed your restorative session. Hope you feel clearer and more focused!',
+        'tired': 'Excellent work on your energizing session. Hope you feel refreshed and revitalized!'
+    };
+    
+    const message = messages[emotion] || 'You\'ve completed your yoga session. Hope you feel energized and refreshed!';
+    document.getElementById('completion-message').textContent = message;
+    document.getElementById('session-complete').style.display = 'flex';
+}
+
+async function completeSessionFinal() {
+    try {
+        await fetch(`/api/session/${sessionData.session_id}/complete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                duration: totalElapsed,
+                rating: selectedRating,
+                notes: ''
+            })
+        });
+        
+        sessionStorage.removeItem('yogaSession');
+        window.location.href = '/';
+    } catch (error) {
+        console.error('Error completing session:', error);
+        window.location.href = '/';
+    }
+}
+
+// Event listeners
+document.getElementById('next-btn').addEventListener('click', nextStep);
+document.getElementById('prev-btn').addEventListener('click', prevStep);
+document.getElementById('pause-btn').addEventListener('click', togglePause);
+document.getElementById('end-session').addEventListener('click', completeSession);
+document.getElementById('video-ref-btn').addEventListener('click', showComingSoon);
+document.getElementById('close-alert').addEventListener('click', hideComingSoon);
+document.getElementById('finish-btn').addEventListener('click', completeSessionFinal);
+
+function showComingSoon() {
+    document.getElementById('coming-soon-alert').style.display = 'flex';
+}
+
+function hideComingSoon() {
+    document.getElementById('coming-soon-alert').style.display = 'none';
+}
+
+
+
+init();
+</script>
+{% endblock %}
