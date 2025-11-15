@@ -166,22 +166,7 @@ When sharing, do NOT include `.venv` (virtual environment) or large raw image ba
 
 ---
 
-## Git / pushing to GitHub
 
-To push this repo to GitHub (the remote URL you provided), run the following from the project root. Authentication will be required (GitHub CLI, cached credentials, or username/password / PAT):
-
-```powershell
-git init
-git add README.md
-git commit -m "Add updated README"
-git branch -M main
-git remote add origin https://github.com/DSEENAIAH/personal-yoga-suggestions.git
-git push -u origin main
-```
-
-If the remote already exists, remove it first with `git remote remove origin` and re-add. If push fails due to authentication, create a GitHub personal access token (PAT) with repo permissions and use it or configure SSH.
-
----
 
 ## Contributing
 
