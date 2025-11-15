@@ -16,6 +16,7 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+pip-wheel-metadata/
 
 # Installer logs
 pip-log.txt
@@ -26,17 +27,28 @@ pip-delete-this-directory.txt
 .coverage
 coverage.xml
 
-# Django stuff (if ever used)
-*.log
-local_settings.py
+# Cache and tooling
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.*
 
 # SQL / DB
 *.db
+*.sqlite3
 instance/*.db
 yoga_app.db
+*.db-journal
 
-# VSCode
-.vscode/
+# Logs
+*.log
 
 # OS files
 .DS_Store
@@ -47,7 +59,6 @@ Thumbs.db
 
 # Misc
 *.pyc
-__pycache__/
 
 # Don't ignore static images that are intentionally tracked.
 # If you want to ignore all static images, uncomment the following:
